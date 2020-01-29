@@ -3,11 +3,17 @@ import {
     isArrayPattern,
     isObjectPattern,
     isObjectProperty,
+    createUnionAppend,
 } from './helper';
 
 import * as sjsoncParser from 'sjsonc-parser';
-import { Node, Pattern } from 'sjsonc-parser/types/parser/types';
-import { __ } from 'ramda';
+import {
+    Node,
+    Pattern,
+    ObjectProperty,
+    ValueType,
+} from 'sjsonc-parser/types/parser/types';
+import { __, forEach } from 'ramda';
 import {
     RefRNode,
     createRObject,
@@ -18,9 +24,8 @@ import {
     RCreater,
 } from '../render/types';
 
-type ArrayElement<A> = A extends Array<infer T> ? T : never;
-
-export function parse(name: string, jsonc: string): RefRNode[] {
+export function parse(name: string | string[], jsonc: string): RefRNode[] {
+    name = Array.isArray(name) ? name : [name];
     const ast = sjsoncParser.parse(jsonc);
     const findComments = createFindComments(ast.comments);
 
@@ -57,42 +62,43 @@ export function parse(name: string, jsonc: string): RefRNode[] {
             ? rNodeFactory(node, name, id, createRObject)
             : rNodeFactory(node, name, id, createRArray);
 
-        const children = node.children;
+        const unionAppend = createUnionAppend(result.children);
 
-        const rchildren = new Set<RNode>();
-
-        children.forEach((child: ArrayElement<typeof children>) => {
+        forEach((child: ObjectProperty | ValueType) => {
             let childName = name;
-            let childNode: Node = child;
-            let childId = id;
+            let valudeNode: Node = child;
+            let valueId = id;
 
             if (isObjectProperty(child)) {
                 const { key, value } = child;
-                childNode = value;
-                (childName = key.value), (childId = `${id}_${childName}`);
+                valudeNode = value;
+                (childName = key.value), (valueId = `${id}_${childName}`);
             }
 
-            if (isObjectPattern(childNode)) {
-                rchildren.add(transform(childNode, childName, childId + '{}'));
-            } else if (isArrayPattern(childNode)) {
-                rchildren.add(transform(childNode, childName, childId + '[]'));
+            if (isObjectPattern(valudeNode)) {
+                unionAppend(transform(valudeNode, childName, valueId + '{}'));
+            } else if (isArrayPattern(valudeNode)) {
+                unionAppend(transform(valudeNode, childName, valueId + '[]'));
             } else {
                 const propertyNode = rNodeFactory(
-                    childNode,
+                    valudeNode,
                     childName,
-                    childId + '$',
+                    valueId + '$',
                     createRElement
                 ) as RElement;
 
-                propertyNode.types.add(typeof childNode.value);
-                rchildren.add(propertyNode);
-            }
-        });
+                propertyNode.types.add(typeof valudeNode.value);
 
-        result.children.push(...rchildren);
+                unionAppend(propertyNode);
+            }
+        })(node.children);
 
         return result;
     }
 
-    return ast.body.map(item => transform(item, name, name));
+    return ast.body.map((item, index) => {
+        const nameAlias = name[index] || name[0] + index;
+
+        return transform(item, nameAlias, nameAlias);
+    });
 }

@@ -8,56 +8,7 @@ import {
     isRElement,
 } from './types';
 import { Comment } from 'sjsonc-parser/types/parser/types';
-import { sortWith, path, ascend } from 'ramda';
-import { isBlockComment } from 'src/parser/helper';
-
-function camel(name: string) {
-    return (
-        name.substr(0, 1).toLocaleUpperCase() +
-        name.slice(1).replace(/-(\w)/g, ($0, $1) => {
-            return $1.toUpperCase();
-        })
-    );
-}
-
-function printSpace(deep: number) {
-    deep = deep * 2;
-
-    let result = '';
-
-    while (deep--) {
-        result += ' ';
-    }
-
-    return result;
-}
-
-function printComments(comments: Comment[], deep: number) {
-    comments = sortWith([ascend(path(['loc', 'start', 'line']))], comments);
-
-    const values = comments.reduce((final, cur) => {
-        if (isBlockComment(cur)) {
-            final.push(...cur.value);
-        } else {
-            final.push(cur.value);
-        }
-
-        return final;
-    }, [] as string[]);
-
-    if (values.length === 1) {
-        return `${printSpace(deep)}/** ${values[0]} */\n`;
-    }
-
-    let result = `${printSpace(deep)}/**\n`;
-
-    values.forEach(v => {
-        result += `${printSpace(deep + 0.5)}* ${v}\n`;
-    });
-
-    result += `${printSpace(deep + 0.5)}*/\n`;
-    return result;
-}
+import { camel, printSpace, printComments } from './helper';
 
 export function renderArray(node: RArray, deep: number): string {
     let hasPattren = false;
@@ -69,9 +20,9 @@ export function renderArray(node: RArray, deep: number): string {
             hasPattren = true;
 
             if (isRObject(child)) {
-                final.push(renderObject(child, deep + 1));
+                final.push(renderObject(child, deep));
             } else {
-                final.push(renderArray(child, deep + 1));
+                final.push(renderArray(child, deep));
             }
         }
 
@@ -168,13 +119,18 @@ export function render(nodes: RefRNode[]): string {
     return nodes
         .map(item => {
             if (isRObject(item)) {
-                return `export interface ${camel(item.name)} ${renderObject(
+                return `${printComments(
+                    item.comments,
+                    0
+                )}export interface ${camel(item.name)} ${renderObject(
                     item,
                     0
                 )}`;
             }
 
-            return `export type ${camel(item.name)} = ${renderArray(item, 0)}`;
+            return `${printComments(item.comments, 0)}export type ${camel(
+                item.name
+            )} = ${renderArray(item, 0)}`;
         })
         .join('\n');
 }

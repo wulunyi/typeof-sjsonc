@@ -4,6 +4,7 @@ import { parse } from './parser';
 const ast = parse(
     'aaa',
     `
+    /** test */
 {
     /** aaa*/
 "aa": true, // a
@@ -17,8 +18,13 @@ b: false
 e: [
 {a: true},
 {a: 123}
-]
+],
+n: [[{a: true}]]
 }
+
+
+// aaa
+[{aa: 1234}]
 `
 );
 

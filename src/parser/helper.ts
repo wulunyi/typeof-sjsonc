@@ -7,7 +7,7 @@ import {
     ObjectProperty,
     BlockComment,
 } from 'sjsonc-parser/types/parser/types';
-import { propEq, anyPass, head } from 'ramda';
+import { propEq, anyPass, head, contains } from 'ramda';
 
 const isSameLine = (line: number) => (comment: Comment) =>
     comment.loc.start.line === comment.loc.end.line &&
@@ -60,3 +60,9 @@ export const isBlockComment = propEq('type', 'BlockComment') as (
 export const isLineComment = propEq('type', 'LineComment') as (
     n: Node
 ) => n is LineComment;
+
+export const createUnionAppend = <T>(list: T[]) => (item: T) => {
+    if (!contains(item, list)) {
+        list.push(item);
+    }
+};
