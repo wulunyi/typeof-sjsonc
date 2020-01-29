@@ -1,0 +1,125 @@
+{
+    "name": "root",
+    "comments": [],
+    "tagCount": 1,
+    "children": [
+        {
+            "name": "a",
+            "comments": [
+                " tail"
+            ],
+            "tagCount": 1,
+            "children": [],
+            "type": "normal",
+            "valueTypes": [
+                "number"
+            ]
+        },
+        {
+            "name": "b",
+            "comments": [],
+            "tagCount": 1,
+            "children": [],
+            "type": "normal",
+            "valueTypes": [
+                "string"
+            ]
+        },
+        {
+            "name": "c",
+            "comments": [],
+            "tagCount": 1,
+            "children": [
+                {
+                    "name": "c",
+                    "comments": [],
+                    "tagCount": 2,
+                    "children": [
+                        {
+                            "name": "a1",
+                            "comments": [
+                                " a1"
+                            ],
+                            "tagCount": 1,
+                            "children": [],
+                            "type": "normal",
+                            "valueTypes": [
+                                "number"
+                            ]
+                        },
+                        {
+                            "name": "list",
+                            "comments": [],
+                            "tagCount": 1,
+                            "children": [
+                                {
+                                    "name": "ccc",
+                                    "comments": [],
+                                    "tagCount": 1,
+                                    "children": [],
+                                    "type": "normal",
+                                    "valueTypes": [
+                                        "number"
+                                    ]
+                                }
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "name": "b1",
+                            "comments": [],
+                            "tagCount": 1,
+                            "children": [],
+                            "type": "normal",
+                            "valueTypes": [
+                                "number"
+                            ]
+                        },
+                        {
+                            "name": "list",
+                            "comments": [],
+                            "tagCount": 1,
+                            "children": [
+                                {
+                                    "name": "list",
+                                    "comments": [],
+                                    "tagCount": 2,
+                                    "children": [],
+                                    "type": "normal",
+                                    "valueTypes": [
+                                        "boolean",
+                                        "any"
+                                    ]
+                                },
+                                {
+                                    "name": "list",
+                                    "comments": [],
+                                    "tagCount": 1,
+                                    "children": [
+                                        {
+                                            "name": "ccc",
+                                            "comments": [],
+                                            "tagCount": 1,
+                                            "children": [],
+                                            "type": "normal",
+                                            "valueTypes": [
+                                                "number"
+                                            ]
+                                        }
+                                    ],
+                                    "type": "object"
+                                }
+                            ],
+                            "type": "array",
+                            "originLen": 3
+                        }
+                    ],
+                    "type": "object"
+                }
+            ],
+            "type": "array",
+            "originLen": 2
+        }
+    ],
+    "type": "object"
+}

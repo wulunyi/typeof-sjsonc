@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "debug",
+            "type": "node",
+            "request": "launch",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "sourceMaps": true,
+            "args": [
+                "-r",
+                "tsconfig-paths/register",
+                "${workspaceRoot}/src/index.debug.ts",
+            ],
+            "env": {
+                "TS_NODE_FILES": true,
+                "TS_NODE_PROJECT": "${workspaceRoot}/tsconfig.json",
+                "NODE_ENV": "development"
+            },
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector"
+        }
+    ]
+}
