@@ -1,63 +1,69 @@
-export enum NodeType {
-    OBJECT = 'object',
-    ARRAY = 'array',
-    NORMAL = 'normal',
+import { Comment } from 'sjsonc-parser/types/parser/types';
+import { propEq } from 'ramda';
+
+export type RNode = RObject | RArray | RElement;
+export type RefRNode = RObject | RArray;
+
+export interface RBaseNode {
+    kind: RNode['kind'];
+    comments: Comment[];
+    markCount: number;
+    name: string;
 }
 
-export class BaseNode {
-    comments: string[] = [];
-    tagCount = 1;
-    type!: NodeType;
-    children: BaseNode[] = [];
-
-    constructor(readonly name: string) {}
-
-    add(node: BaseNode) {
-        if (!this.children.includes(node)) {
-            this.children.push(node);
-        }
-    }
-
-    isObject(): this is ObjectNode {
-        return this.type === NodeType.OBJECT;
-    }
-
-    isNormal(): this is NormalNode {
-        return this.type === NodeType.NORMAL;
-    }
-
-    isArray(): this is ArrayNode {
-        return this.type === NodeType.ARRAY;
-    }
+export interface RObject extends RBaseNode {
+    kind: 'Object';
+    children: RNode[];
 }
 
-export class ObjectNode extends BaseNode {
-    static create(name: string) {
-        return new ObjectNode(name);
-    }
-
-    type = NodeType.OBJECT;
+export interface RArray extends RBaseNode {
+    kind: 'Array';
+    children: RNode[];
 }
 
-export class ArrayNode extends BaseNode {
-    static create(name: string) {
-        return new ArrayNode(name);
-    }
-
-    type = NodeType.ARRAY;
+export interface RElement extends RBaseNode {
+    kind: 'Element';
+    types: Set<string>;
 }
 
-export class NormalNode extends BaseNode {
-    static create(name: string) {
-        return new NormalNode(name);
-    }
+export type PartialExcludeKind<T> = Partial<Omit<T, 'kind'>>;
 
-    type = NodeType.NORMAL;
-    valueTypes: string[] = [];
+export type RCreater<T extends RNode> = (name: string) => T;
 
-    addType(type: string) {
-        if (!this.valueTypes.includes(type)) {
-            this.valueTypes.push(type);
-        }
-    }
-}
+export const createRObject: RCreater<RObject> = (name = '') => {
+    return {
+        kind: 'Object',
+        comments: [],
+        markCount: 1,
+        name,
+        children: [],
+    };
+};
+
+export const isRObject = propEq('kind', 'Object') as (n: RNode) => n is RObject;
+
+export const createRArray: RCreater<RArray> = (name = '') => {
+    return {
+        kind: 'Array',
+        comments: [],
+        markCount: 1,
+        name,
+        children: [],
+    };
+};
+
+export const isRArray = propEq('kind', 'Array') as (n: RNode) => n is RArray;
+
+export const createRElement: RCreater<RElement> = (name = '') => {
+    return {
+        kind: 'Element',
+        comments: [],
+        markCount: 1,
+        name,
+        types: new Set<string>(),
+    };
+};
+
+export const isRElement = propEq('kind', 'Element') as (
+    n: RNode
+) => n is RElement;
