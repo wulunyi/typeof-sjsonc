@@ -136,5 +136,5 @@ export function render(
                 item.name
             )} = ${renderArray(item, 0)}`;
         })
-        .join('\n');
+        .join('\n\n');
 }

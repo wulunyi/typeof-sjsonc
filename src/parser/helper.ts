@@ -87,8 +87,12 @@ function createBeLongTo(
                 always(isPattern),
                 always(isNoNextSibling(nextSiblingLoc)),
                 isAfter(parentLoc),
+                isIn(parentLoc),
             ]),
-            isAfterNearSameLine(loc, nextSiblingLoc),
+            allPass([
+                isIn(parentLoc),
+                isAfterNearSameLine(loc, nextSiblingLoc),
+            ]),
         ])(commentLoc);
     };
 }
