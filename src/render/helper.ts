@@ -34,6 +34,10 @@ export function printComments(comments: Comment[], deep: number) {
         return final;
     }, [] as string[]);
 
+    if (values.length === 0) {
+        return '';
+    }
+
     if (values.length === 1) {
         return `${printSpace(deep)}/** ${values[0]} */\n`;
     }

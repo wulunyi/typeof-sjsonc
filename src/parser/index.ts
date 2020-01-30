@@ -87,7 +87,7 @@ export function parse(name: string | string[], jsonc: string): RefRNode[] {
                     createRElement
                 ) as RElement;
 
-                propertyNode.types.add(typeof valudeNode.value);
+                createUnionAppend(propertyNode.types)(typeof valudeNode.value);
 
                 unionAppend(propertyNode);
             }

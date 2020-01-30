@@ -6,6 +6,7 @@ import {
     RElement,
     RNode,
     isRElement,
+    RenderOptions,
 } from './types';
 import { Comment } from 'sjsonc-parser/types/parser/types';
 import { camel, printSpace, printComments } from './helper';
@@ -41,12 +42,12 @@ export function renderArray(node: RArray, deep: number): string {
 }
 
 export function renderElement(node: RElement): string {
-    const typeSize = node.types.size;
+    const typeLen = node.types.length;
     const values = [...node.types];
 
-    if (typeSize === 0) {
+    if (typeLen === 0) {
         return 'any';
-    } else if (typeSize === 1) {
+    } else if (typeLen === 1) {
         return values[0];
     } else {
         return values.join('|');
@@ -115,7 +116,10 @@ export function renderObject(node: RObject, deep: number): string {
     return result;
 }
 
-export function render(nodes: RefRNode[]): string {
+export function render(
+    nodes: RefRNode[],
+    options?: Partial<RenderOptions>
+): string {
     return nodes
         .map(item => {
             if (isRObject(item)) {

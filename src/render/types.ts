@@ -1,6 +1,10 @@
 import { Comment } from 'sjsonc-parser/types/parser/types';
 import { propEq } from 'ramda';
 
+export interface RenderOptions {
+    disallowComments: boolean;
+}
+
 export type RNode = RObject | RArray | RElement;
 export type RefRNode = RObject | RArray;
 
@@ -23,7 +27,7 @@ export interface RArray extends RBaseNode {
 
 export interface RElement extends RBaseNode {
     kind: 'Element';
-    types: Set<string>;
+    types: string[];
 }
 
 export type PartialExcludeKind<T> = Partial<Omit<T, 'kind'>>;
@@ -60,7 +64,7 @@ export const createRElement: RCreater<RElement> = (name = '') => {
         comments: [],
         markCount: 1,
         name,
-        types: new Set<string>(),
+        types: [],
     };
 };
 

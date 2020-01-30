@@ -5,22 +5,7 @@ const ast = parse(
     'aaa',
     `
     /** test */
-{
-    /** aaa*/
-"aa": true, // a
-// b
-"b": 123, // hello
-d: [123, true], /** aaa */
-obj: {
-a: true,
-b: false
-},
-e: [
-{a: true},
-{a: 123}
-],
-n: [[{a: true}]]
-}
+{aa: 123, b: true /**222*/}/**aaa*/{c: 123}
 
 
 // aaa

@@ -20,7 +20,7 @@
         "@rollup/plugin-typescript": "^2.1.0",
         "@types/moo": "^0.5.1",
         "ramda": "^0.26.1",
-        "sjsonc-parser": "^1.0.0-beta7"
+        "sjsonc-parser": "^1.0.1"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^11.0.1",
