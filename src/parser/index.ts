@@ -12,6 +12,9 @@ import {
     Pattern,
     ObjectProperty,
     ValueType,
+    ObjectPattern,
+    ArrayPattern,
+    Program,
 } from 'sjsonc-parser/types/parser/types';
 import { __, forEach } from 'ramda';
 import {
@@ -36,7 +39,9 @@ export function parse(name: string | string[], jsonc: string): RefRNode[] {
         node: Node,
         name: string,
         id: string,
-        creator: RCreater<T>
+        creator: RCreater<T>,
+        parent: Program | Pattern,
+        nextSibling?: Node
     ): T {
         let resultNode: T;
 
@@ -49,56 +54,89 @@ export function parse(name: string | string[], jsonc: string): RefRNode[] {
         }
 
         if (isObjectPattern(node) || isArrayPattern(node)) {
-            resultNode.comments.push(...findComments(node.loc.start.line));
+            resultNode.comments.push(
+                ...findComments(node.loc, true, parent.loc, nextSibling?.loc)
+            );
         } else {
-            resultNode.comments.push(...findComments(node.loc.end.line));
+            resultNode.comments.push(
+                ...findComments(node.loc, false, parent.loc, nextSibling?.loc)
+            );
         }
 
         return resultNode;
     }
 
-    function transform(node: Pattern, name: string, id: string): RefRNode {
+    function transform(
+        node: Pattern,
+        name: string,
+        id: string,
+        parent: Program | Pattern,
+        nextSibling?: Node
+    ): RefRNode {
         const result = isObjectPattern(node)
-            ? rNodeFactory(node, name, id, createRObject)
-            : rNodeFactory(node, name, id, createRArray);
+            ? rNodeFactory(node, name, id, createRObject, parent, nextSibling)
+            : rNodeFactory(node, name, id, createRArray, parent, nextSibling);
 
         const unionAppend = createUnionAppend(result.children);
 
-        forEach((child: ObjectProperty | ValueType) => {
-            let childName = name;
-            let valudeNode: Node = child;
-            let valueId = id;
+        node.children.forEach(
+            (child: ObjectProperty | ValueType, index: number) => {
+                let childName = name;
+                let valudeNode: Node = child;
+                let valueId = id;
+                const nextSiblingChild = node.children[index + 1];
 
-            if (isObjectProperty(child)) {
-                const { key, value } = child;
-                valudeNode = value;
-                (childName = key.value), (valueId = `${id}_${childName}`);
+                if (isObjectProperty(child)) {
+                    const { key, value } = child;
+                    valudeNode = value;
+                    (childName = key.value), (valueId = `${id}_${childName}`);
+                }
+
+                if (isObjectPattern(valudeNode)) {
+                    unionAppend(
+                        transform(
+                            valudeNode,
+                            childName,
+                            valueId + '{}',
+                            node,
+                            nextSiblingChild
+                        )
+                    );
+                } else if (isArrayPattern(valudeNode)) {
+                    unionAppend(
+                        transform(
+                            valudeNode,
+                            childName,
+                            valueId + '[]',
+                            node,
+                            nextSiblingChild
+                        )
+                    );
+                } else {
+                    const propertyNode = rNodeFactory(
+                        valudeNode,
+                        childName,
+                        valueId + '$',
+                        createRElement,
+                        node,
+                        nextSiblingChild
+                    ) as RElement;
+
+                    createUnionAppend(propertyNode.types)(
+                        typeof valudeNode.value
+                    );
+
+                    unionAppend(propertyNode);
+                }
             }
-
-            if (isObjectPattern(valudeNode)) {
-                unionAppend(transform(valudeNode, childName, valueId + '{}'));
-            } else if (isArrayPattern(valudeNode)) {
-                unionAppend(transform(valudeNode, childName, valueId + '[]'));
-            } else {
-                const propertyNode = rNodeFactory(
-                    valudeNode,
-                    childName,
-                    valueId + '$',
-                    createRElement
-                ) as RElement;
-
-                createUnionAppend(propertyNode.types)(typeof valudeNode.value);
-
-                unionAppend(propertyNode);
-            }
-        })(node.children);
+        );
 
         return result;
     }
 
-    return ast.body.map((item, index) => {
+    return ast.body.map((item, index, arr) => {
         const nameAlias = name[index] || name[0] + index;
 
-        return transform(item, nameAlias, nameAlias);
+        return transform(item, nameAlias, nameAlias, ast, arr[index + 1]);
     });
 }

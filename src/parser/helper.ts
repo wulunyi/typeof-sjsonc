@@ -6,34 +6,124 @@ import {
     ArrayPattern,
     ObjectProperty,
     BlockComment,
+    SourceLocation,
+    Location,
 } from 'sjsonc-parser/types/parser/types';
-import { propEq, anyPass, head, contains } from 'ramda';
+import {
+    propEq,
+    anyPass,
+    contains,
+    isEmpty,
+    allPass,
+    always,
+    not,
+    and,
+} from 'ramda';
 
-const isSameLine = (line: number) => (comment: Comment) =>
-    comment.loc.start.line === comment.loc.end.line &&
-    comment.loc.end.line === line;
+const isAfterLoc = (aloc: Location, bloc: Location) => {
+    return (
+        aloc.line < bloc.line ||
+        (aloc.line === bloc.line && aloc.column < bloc.column)
+    );
+};
 
-const isPreLine = (line: number) => (comment: Comment) =>
-    comment.loc.end.line < line;
+const isBeforeLoc = (aloc: Location, bloc: Location) => {
+    return (
+        aloc.line > bloc.line ||
+        (aloc.line === bloc.line && aloc.column > bloc.column)
+    );
+};
 
-const commentBelongToLine = (comment: Comment, line: number) =>
-    anyPass([isSameLine(line), isPreLine(line)])(comment);
+const isSameLine = (aloc: Location, bloc: Location) => {
+    return aloc.line === bloc.line;
+};
+
+const isPre = (asloc: SourceLocation) => (bsloc: SourceLocation) => {
+    return isBeforeLoc(asloc.start, bsloc.end);
+};
+
+const isAfter = (asloc: SourceLocation) => (bsloc: SourceLocation) => {
+    return isAfterLoc(asloc.end, bsloc.start);
+};
+
+const isAfterNearSameLine = (
+    asloc: SourceLocation,
+    nextSloc?: SourceLocation
+) => (bsloc: SourceLocation) => {
+    return (
+        isSameLine(asloc.end, bsloc.start) &&
+        isSameLine(bsloc.start, bsloc.end) &&
+        isAfterLoc(asloc.end, bsloc.start) &&
+        nextSloc !== undefined &&
+        isBeforeLoc(nextSloc.start, bsloc.end)
+    );
+};
+
+const isIn = (parentLoc: SourceLocation) => (commentLoc: SourceLocation) => {
+    return and(
+        isAfterLoc(parentLoc.start, commentLoc.start),
+        isBeforeLoc(parentLoc.end, commentLoc.end)
+    );
+};
+
+const isNoNextSibling = (nextSiblingLoc?: SourceLocation) =>
+    nextSiblingLoc === undefined;
+
+function createBeLongTo(
+    loc: SourceLocation,
+    isPattern: boolean,
+    parentLoc: SourceLocation,
+    nextSiblingLoc?: SourceLocation
+) {
+    return (commentLoc: SourceLocation) => {
+        return anyPass([
+            isPre(loc),
+            allPass([
+                always(not(isPattern)),
+                always(isNoNextSibling(nextSiblingLoc)),
+                isIn(parentLoc),
+            ]),
+            allPass([
+                always(isPattern),
+                always(isNoNextSibling(nextSiblingLoc)),
+                isAfter(parentLoc),
+            ]),
+            isAfterNearSameLine(loc, nextSiblingLoc),
+        ])(commentLoc);
+    };
+}
 
 export function createFindComments(comments: Comment[]) {
     const list = comments.slice(0);
 
-    return (line: number): Comment[] => {
-        if (list.length === 0) {
+    /**
+     * @param loc 传入的是作为值的 loc
+     * @param nextSiblingLoc loc 所在项的下一个兄弟项的 loc
+     */
+    return (
+        loc: SourceLocation,
+        isPattern: boolean,
+        parentLoc: SourceLocation,
+        nextSiblingLoc?: SourceLocation
+    ) => {
+        if (isEmpty(list)) {
             return [];
         }
 
+        const beLongTo = createBeLongTo(
+            loc,
+            isPattern,
+            parentLoc,
+            nextSiblingLoc
+        );
+
+        let len = list.length;
+
         const result: Comment[] = [];
 
-        while (list.length) {
-            if (commentBelongToLine(head(list)!, line)) {
-                result.push(list.shift()!);
-            } else {
-                break;
+        while (len--) {
+            if (beLongTo(list[len]!.loc)) {
+                result.push(...list.splice(len, 1));
             }
         }
 

@@ -22,7 +22,13 @@ export function printSpace(deep: number) {
 }
 
 export function printComments(comments: Comment[], deep: number) {
-    comments = sortWith([ascend(path(['loc', 'start', 'line']))], comments);
+    comments = sortWith(
+        [
+            ascend(path(['loc', 'start', 'line'])),
+            ascend(path(['loc', 'start', 'column'])),
+        ],
+        comments
+    );
 
     const values = comments.reduce((final, cur) => {
         if (isBlockComment(cur)) {

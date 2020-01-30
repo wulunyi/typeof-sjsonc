@@ -3,14 +3,7 @@ import { parse } from './parser';
 
 const ast = parse(
     'aaa',
-    `
-    /** test */
-{aa: 123, b: true /**222*/}/**aaa*/{c: 123}
-
-
-// aaa
-[{aa: 1234}]
-`
+    `//123\n{//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n} \n/**12*/{c: 123}`
 );
 
 const result = render(ast);
