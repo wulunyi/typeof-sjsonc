@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import visualizer from 'rollup-plugin-visualizer';
 import cleanup from 'rollup-plugin-cleanup';
+import ts from '@wessberg/rollup-plugin-ts';
 
 export default [
     {
@@ -16,7 +17,6 @@ export default [
             typescript({
                 module: 'ESNext',
                 target: 'es5',
-                declaration: false,
             }),
             cleanup({ comments: 'none', extensions: ['ts'] }),
             resolve({
@@ -35,5 +35,13 @@ export default [
                 },
             }),
         ],
+    },
+    {
+        input: 'src/index.ts',
+        output: {
+            file: 'lib/index.d.ts',
+            format: 'es',
+        },
+        plugins: [ts()],
     },
 ];

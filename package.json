@@ -1,8 +1,9 @@
 {
-    "name": "typescript-api-demo",
+    "name": "typeof-sjsonc",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
     "scripts": {
         "test": "jest",
         "check": "gts check",
@@ -17,10 +18,11 @@
     "license": "ISC",
     "dependencies": {
         "@rollup/plugin-node-resolve": "^7.0.0",
-        "@rollup/plugin-typescript": "^2.1.0",
+        "@rollup/plugin-typescript": "^3.0.0",
         "@types/moo": "^0.5.1",
+        "@wessberg/rollup-plugin-ts": "^1.2.15",
         "ramda": "^0.26.1",
-        "sjsonc-parser": "^1.0.1"
+        "sjsonc-parser": "^1.0.2"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^11.0.1",
