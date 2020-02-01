@@ -11,6 +11,7 @@
         "test": "jest --coverage",
         "check": "gts check",
         "clean": "gts clean",
+        "precompile": "jest",
         "compile": "rollup -c ./rollup.config.js",
         "fix": "gts fix",
         "prepare": "npm run compile",

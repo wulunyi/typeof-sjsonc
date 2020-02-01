@@ -42,6 +42,7 @@ export default [
             file: 'lib/index.d.ts',
             format: 'es',
         },
-        plugins: [ts()],
+        external: ['ramda', 'sjsonc-parser'],
+        plugins: [ts({})],
     },
 ];
