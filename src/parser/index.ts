@@ -12,11 +12,9 @@ import {
     Pattern,
     ObjectProperty,
     ValueType,
-    ObjectPattern,
-    ArrayPattern,
     Program,
 } from 'sjsonc-parser/types/parser/types';
-import { __, forEach } from 'ramda';
+import { __ } from 'ramda';
 import {
     RefRNode,
     createRObject,
@@ -27,7 +25,10 @@ import {
     RCreater,
 } from '../render/types';
 
-export function parse(name: string | string[], jsonc: string): RefRNode[] {
+export function parse(
+    jsonc: string,
+    name: string | string[] = 'root'
+): RefRNode[] {
     name = Array.isArray(name) ? name : [name];
     const ast = sjsoncParser.parse(jsonc);
     const findComments = createFindComments(ast.comments);

@@ -127,7 +127,7 @@ export function createFindComments(comments: Comment[]) {
 
         while (len--) {
             if (beLongTo(list[len]!.loc)) {
-                result.push(...list.splice(len, 1));
+                result.unshift(...list.splice(len, 1));
             }
         }
 

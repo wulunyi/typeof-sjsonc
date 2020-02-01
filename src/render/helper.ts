@@ -1,4 +1,4 @@
-import { isBlockComment } from 'src/parser/helper';
+import { isBlockComment } from '../parser/helper';
 import { sortWith, ascend, path } from 'ramda';
 import { Comment } from 'sjsonc-parser/types/parser/types';
 
@@ -21,7 +21,14 @@ export function printSpace(deep: number) {
     return result;
 }
 
-export function printComments(comments: Comment[], deep: number) {
+export const createPrintComments = (disallowComments: boolean) => (
+    comments: Comment[],
+    deep: number
+) => {
+    if (disallowComments) {
+        return '';
+    }
+
     comments = sortWith(
         [
             ascend(path(['loc', 'start', 'line'])),
@@ -56,4 +63,4 @@ export function printComments(comments: Comment[], deep: number) {
 
     result += `${printSpace(deep)} */\n`;
     return result;
-}
+};

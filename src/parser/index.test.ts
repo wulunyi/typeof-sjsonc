@@ -1,84 +1,79 @@
 import { parse } from './index';
-import { ObjectNode, NormalNode, ArrayNode } from '../render/types';
+import { createRObject, createRArray, createRElement } from '../render/types';
+import * as sjsoncParser from 'sjsonc-parser';
 
-test('parse normal type', () => {
-    expect(parse('root', `{}`)).toEqual(ObjectNode.create('root'));
+describe('Test Parser', () => {
+    it('Test parse ""', () => {
+        expect(parse('', 'Root')).toEqual([]);
+    });
 
-    const t1 = ObjectNode.create('root');
-    const tn1 = NormalNode.create('name');
+    it('Test parse {}', () => {
+        expect(parse('{}', 'Root')).toEqual([createRObject('Root')]);
+    });
 
-    tn1.addType('string');
-    tn1.comments.push('test1');
-    tn1.comments.push('test2');
+    it('Test parse []', () => {
+        expect(parse('[]', 'Root')).toEqual([createRArray('Root')]);
+    });
 
-    const tn2 = NormalNode.create('age');
+    it('Test parse Element', () => {
+        expect(
+            parse('{a: 123, b: true, c: {d: []}} [123]', ['Root', 'bbb'])
+        ).toEqual([
+            createRObject('Root', [
+                createRElement('a', ['number']),
+                createRElement('b', ['boolean']),
+                createRObject('c', [createRArray('d', [])]),
+            ]),
+            createRArray('bbb', [createRElement('bbb', ['number'])]),
+        ]);
+    });
 
-    tn2.addType('number');
-    tn2.comments.push('aaaa');
+    it('Test parse comments', () => {
+        const str = `//123\n{a: {//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n}} \n/**12*/{c: 123}`;
+        const comments = sjsoncParser.parse(str).comments;
 
-    t1.add(tn1);
-    t1.add(tn2);
+        expect(parse(str, ['root', 'root2'])).toEqual([
+            createRObject(
+                'root',
+                [
+                    createRObject('a', [
+                        createRElement(
+                            'aa',
+                            ['number'],
+                            [comments[1], comments[2], comments[3]]
+                        ),
+                        createRElement(
+                            'b',
+                            ['boolean'],
+                            [comments[4], comments[5]]
+                        ),
+                    ]),
+                ],
+                [comments[0]]
+            ),
+            createRObject(
+                'root2',
+                [createRElement('c', ['number'])],
+                [comments[comments.length - 1]]
+            ),
+        ]);
+    });
 
-    expect(
-        parse(
-            'root',
-            `{
-                // test1
-                name: 'test', // test2
-                /** aaaa */
-                age: 123
-            }`
-        )
-    ).toEqual(t1);
-});
+    it('Test parse Array', () => {
+        const a = createRElement('a', ['number', 'boolean']);
+        a.markCount = 2;
+        const root = createRObject('root', [a]);
+        root.markCount = 2;
 
-test('parse array', () => {
-    const root = ObjectNode.create('root');
-    const arr = ArrayNode.create('list');
-    const item = NormalNode.create('list');
-    item.valueTypes.push('boolean');
-    item.valueTypes.push('number');
-    item.valueTypes.push('object');
-    item.valueTypes.push('string');
-    item.valueTypes.push('any');
-    item.tagCount = 5;
-    arr.children.push(item);
-    root.children.push(arr);
+        expect(parse(`[{a: 123},{a: true}]`)).toEqual([
+            createRArray('root', [root]),
+        ]);
+    });
 
-    expect(
-        parse(
-            'root',
-            `{
-               list: [true, 1234, null, 'string', undefined]
-            }`
-        )
-    ).toEqual(root);
-});
-
-test('parse array merge', () => {
-    const root = ObjectNode.create('root');
-    const arr = ArrayNode.create('list');
-    const item = ObjectNode.create('list');
-    const a = NormalNode.create('a');
-    a.valueTypes.push('number');
-    const b = NormalNode.create('b');
-    b.valueTypes.push('number');
-
-    item.tagCount = 2;
-    item.children.push(a, b);
-    arr.children.push(item);
-    root.children.push(arr);
-
-    expect(
-        parse(
-            'root',
-            `{
-               list: [{
-                   a: 1234,
-               }, {
-                   b: 1234
-               }]
-            }`
-        )
-    ).toEqual(root);
+    it('Test name set', () => {
+        expect(parse(`{} []`)).toEqual([
+            createRObject('root'),
+            createRArray('root1'),
+        ]);
+    });
 });

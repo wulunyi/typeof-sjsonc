@@ -4,8 +4,11 @@
     "description": "",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "files": [
+        "lib"
+    ],
     "scripts": {
-        "test": "jest",
+        "test": "jest --coverage",
         "check": "gts check",
         "clean": "gts clean",
         "compile": "rollup -c ./rollup.config.js",

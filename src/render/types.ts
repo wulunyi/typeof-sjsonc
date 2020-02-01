@@ -2,6 +2,7 @@ import { Comment } from 'sjsonc-parser/types/parser/types';
 import { propEq } from 'ramda';
 
 export interface RenderOptions {
+    /** 禁止产出注释 */
     disallowComments: boolean;
 }
 
@@ -32,39 +33,55 @@ export interface RElement extends RBaseNode {
 
 export type PartialExcludeKind<T> = Partial<Omit<T, 'kind'>>;
 
-export type RCreater<T extends RNode> = (name: string) => T;
+export type RCreater<T extends RNode> = (
+    name: string,
+    children?: T extends RElement ? string[] : RNode[],
+    comments?: Comment[]
+) => T;
 
-export const createRObject: RCreater<RObject> = (name = '') => {
+export const createRObject: RCreater<RObject> = (
+    name = '',
+    children: RNode[] = [],
+    comments: Comment[] = []
+) => {
     return {
         kind: 'Object',
-        comments: [],
+        comments,
         markCount: 1,
         name,
-        children: [],
+        children,
     };
 };
 
 export const isRObject = propEq('kind', 'Object') as (n: RNode) => n is RObject;
 
-export const createRArray: RCreater<RArray> = (name = '') => {
+export const createRArray: RCreater<RArray> = (
+    name = '',
+    children: RNode[] = [],
+    comments: Comment[] = []
+) => {
     return {
         kind: 'Array',
-        comments: [],
+        comments,
         markCount: 1,
         name,
-        children: [],
+        children,
     };
 };
 
 export const isRArray = propEq('kind', 'Array') as (n: RNode) => n is RArray;
 
-export const createRElement: RCreater<RElement> = (name = '') => {
+export const createRElement: RCreater<RElement> = (
+    name = '',
+    types: string[] = [],
+    comments: Comment[] = []
+) => {
     return {
         kind: 'Element',
-        comments: [],
+        comments,
         markCount: 1,
         name,
-        types: [],
+        types,
     };
 };
 
