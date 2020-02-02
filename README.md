@@ -1,4 +1,4 @@
-# typeof-sjsonc
+# typeof-sjsonc[![npm version](https://badge.fury.io/js/typeof-sjsonc.svg)](https://badge.fury.io/js/typeof-sjsonc)
 
 将 similar jsonc 转换为 TypeScript 的 interface
 
@@ -36,7 +36,7 @@ yarn
 
 ```shell
 yarn add typeof-sjsonc --save
-```  
+```
 
 use
 
@@ -67,19 +67,23 @@ export interface Aaa {
          */
         b: boolean;
     };
-    b: Array<number|boolean|{
-        /**
-         * 111
-         * 22
-         * eee
-         */
-        aa: number;
-        /**
-         * bbb
-         * aaa
-         */
-        b: boolean;
-    }>;
+    b: Array<
+        | number
+        | boolean
+        | {
+              /**
+               * 111
+               * 22
+               * eee
+               */
+              aa: number;
+              /**
+               * bbb
+               * aaa
+               */
+              b: boolean;
+          }
+    >;
 }
 
 /** 12 */
@@ -92,7 +96,11 @@ export interface Aaa1 {
 
 ### typeofSjsonc(jsonc: string, name?: string, options?: {disallowComments?: boolean})
 
-+ jsonc: 待抓换的字符串
-+ name: interface 的名字，默认为 root
-+ options: 配置项
-  + disallowComments: 不产出注释，默认为 false
+-   jsonc: 待抓换的字符串
+-   name: interface 的名字，默认为 root
+-   options: 配置项
+    -   disallowComments: 不产出注释，默认为 false
+
+## License
+
+MIT
