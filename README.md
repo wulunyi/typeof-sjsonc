@@ -2,7 +2,43 @@
 
 将 similar jsonc 转换为 TypeScript 的 interface
 
-## Used
+```txt
+{
+    // 123
+    "a": 123,
+    /** true */
+    b: true,
+    c: [{d: 'test'}]
+}
+```
+
+```typescript
+export interface Root {
+    /** 123 */
+    a: number;
+    /** true */
+    b: boolean;
+    c: Array<{
+        d: string;
+    }>;
+}
+```
+
+## Usage
+
+npm
+
+```shell
+npm i typeof-sjsonc --save
+```
+
+yarn
+
+```shell
+yarn add typeof-sjsonc --save
+```  
+
+use
 
 ```typescript
 import { typeofSjsonc } from 'typeof-sjsonc';
@@ -55,3 +91,12 @@ export interface Aaa1 {
     c: number;
 }
 ```
+
+## API
+
+### typeofSjsonc(jsonc: string, name?: string, options?: {disallowComments?: boolean})
+
++ jsonc: 待抓换的字符串
++ name: interface 的名字，默认为 root
++ options: 配置项
+  + disallowComments: 不产出注释，默认为 false
