@@ -15,11 +15,18 @@
         "compile": "rollup -c ./rollup.config.js",
         "fix": "gts fix",
         "prepare": "npm run compile",
-        "posttest": "npm run check"
+        "posttest": "npm run check",
+        "release": "release-it",
+        "release:beta": "release-it patch --preRelease=beta"
     },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org"
+    },
+    "repository": "https://github.com/wulunyi/typeof-sjsonc.git",
     "keywords": [],
     "author": "",
-    "license": "ISC",
+    "license": "MIT",
     "dependencies": {
         "@rollup/plugin-node-resolve": "^7.0.0",
         "@rollup/plugin-typescript": "^3.0.0",
@@ -35,6 +42,7 @@
         "@types/ramda": "^0.26.39",
         "gts": "^1.1.2",
         "jest": "^24.9.0",
+        "release-it": "^12.4.3",
         "rollup": "^1.29.1",
         "rollup-plugin-cleanup": "^3.1.1",
         "rollup-plugin-commonjs": "^10.1.0",
