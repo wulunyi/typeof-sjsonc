@@ -17,6 +17,7 @@
         "prepare": "npm run compile",
         "posttest": "npm run check",
         "release": "release-it",
+        "release:patch": "release-it patch",
         "release:beta": "release-it patch --preRelease=beta"
     },
     "publishConfig": {
