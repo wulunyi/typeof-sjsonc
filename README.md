@@ -67,23 +67,19 @@ export interface Aaa {
          */
         b: boolean;
     };
-    b: Array<
-        | number
-        | boolean
-        | {
-              /**
-               * 111
-               * 22
-               * eee
-               */
-              aa: number;
-              /**
-               * bbb
-               * aaa
-               */
-              b: boolean;
-          }
-    >;
+    b: Array<number|boolean|{
+        /**
+         * 111
+         * 22
+         * eee
+         */
+        aa: number;
+        /**
+         * bbb
+         * aaa
+         */
+        b: boolean;
+    }>;
 }
 
 /** 12 */
