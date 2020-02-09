@@ -4,8 +4,10 @@
     "description": "",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "module": "es/index.js",
     "files": [
-        "lib"
+        "lib",
+        "es"
     ],
     "scripts": {
         "test": "jest --coverage",
@@ -29,18 +31,18 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@rollup/plugin-node-resolve": "^7.0.0",
-        "@rollup/plugin-typescript": "^3.0.0",
-        "@types/moo": "^0.5.1",
-        "@wessberg/rollup-plugin-ts": "^1.2.15",
         "ramda": "^0.26.1",
         "sjsonc-parser": "^1.0.2"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^11.0.1",
+        "@rollup/plugin-node-resolve": "^7.1.1",
+        "@rollup/plugin-typescript": "^3.0.0",
         "@types/jest": "^24.0.23",
+        "@types/moo": "^0.5.1",
         "@types/node": "^10.0.3",
         "@types/ramda": "^0.26.39",
+        "@wessberg/rollup-plugin-ts": "^1.2.16",
         "gts": "^1.1.2",
         "jest": "^24.9.0",
         "release-it": "^12.4.3",

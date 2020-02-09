@@ -12,6 +12,7 @@ export default [
         output: {
             file: 'lib/index.js',
             format: 'cjs',
+            sourcemap: true,
         },
         plugins: [
             typescript({
@@ -34,6 +35,28 @@ export default [
                     warnings: false,
                 },
             }),
+        ],
+    },
+    {
+        input: './src/index.ts',
+        output: {
+            file: 'es/index.js',
+            format: 'es',
+            sourcemap: true,
+        },
+        external: ['ramda', 'sjsonc-parser'],
+        plugins: [
+            resolve({
+                customResolveOptions: {
+                    moduleDirectory: 'node_modules',
+                },
+            }),
+            commonjs(),
+            typescript({
+                module: 'ESNext',
+                target: 'ES6',
+            }),
+            cleanup({ comments: 'none', extensions: ['ts'] }),
         ],
     },
     {
