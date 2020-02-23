@@ -1,9 +1,15 @@
 import { typeofSjsonc } from './index';
 
 const result = typeofSjsonc(
-    '//123\n{a: {//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n}, b: [123,true, {//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n}]} \n/**12*/{c: 123}',
+    `//123
+    {a: {//111
+        aa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa 
+    }, b: [123,true, {//111
+        aa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa 
+    }]} 
+    /**12*/{c: 123, a: {}, aaa: {}}`,
     'aaa',
-    { disallowComments: false }
+    { disallowComments: false, separate: true }
 );
 
 console.log(result);

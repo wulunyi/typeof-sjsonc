@@ -4,6 +4,8 @@ import { propEq } from 'ramda';
 export interface RenderOptions {
     /** 禁止产出注释 */
     disallowComments: boolean;
+    /** 是否将子结构分割出单独的 interface */
+    separate: boolean;
 }
 
 export type RNode = RObject | RArray | RElement;

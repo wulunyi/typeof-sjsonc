@@ -4,7 +4,8 @@
         "rootDir": ".",
         "outDir": "build",
         "baseUrl": ".",
-        "noFallthroughCasesInSwitch": false
+        "noFallthroughCasesInSwitch": false,
+        "moduleResolution": "node"
     },
     "include": [
         "src/**/*.ts"

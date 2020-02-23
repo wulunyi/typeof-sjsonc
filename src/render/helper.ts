@@ -1,6 +1,16 @@
 import { isBlockComment } from '../parser/helper';
-import { sortWith, ascend, path } from 'ramda';
+import { sortWith, ascend, path, merge } from 'ramda';
 import { Comment } from 'sjsonc-parser/types/parser/types';
+import { RenderOptions } from './types';
+
+const DEFAULT_OPTIONS: RenderOptions = {
+    disallowComments: false,
+    separate: false,
+};
+
+export const sureOptions = merge(DEFAULT_OPTIONS) as (
+    options?: Partial<RenderOptions>
+) => RenderOptions;
 
 export function camel(name: string) {
     return (

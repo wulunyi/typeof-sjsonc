@@ -1,17 +1,15 @@
 import { parse } from './parser';
 import { render } from './render';
-import { RenderOptions } from './render/types';
-
-const DEFAULT_OPTIONS: RenderOptions = {
-    disallowComments: false,
-};
+import { separate } from './plugins/separate';
 
 export function typeofSjsonc(
     jsonc: string,
     name = 'root',
-    options?: Partial<RenderOptions>
+    options?: Parameters<typeof render>[1]
 ) {
-    return render(parse(jsonc, name), Object.assign(DEFAULT_OPTIONS, options));
+    const ast = parse(jsonc, name);
+
+    return render(options?.separate ? separate(ast) : ast, options);
 }
 
 export { parse, render };

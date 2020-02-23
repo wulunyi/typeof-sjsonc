@@ -9,11 +9,15 @@ import {
     RenderOptions,
 } from './types';
 import { Comment } from 'sjsonc-parser/types/parser/types';
-import { camel, printSpace, createPrintComments } from './helper';
-import { pipe, map, join } from 'ramda';
+import { camel, printSpace, createPrintComments, sureOptions } from './helper';
 
-export function render(nodes: RefRNode[], options: RenderOptions): string {
-    const printComments = createPrintComments(options.disallowComments);
+export function render(
+    nodes: RefRNode[],
+    options?: Partial<RenderOptions>
+): string {
+    const { disallowComments } = sureOptions(options);
+
+    const printComments = createPrintComments(disallowComments);
 
     function renderArray(node: RArray, deep: number): string {
         let hasPattren = false;
@@ -120,8 +124,8 @@ export function render(nodes: RefRNode[], options: RenderOptions): string {
         return result;
     }
 
-    return pipe(
-        map((item: RArray | RObject) => {
+    return nodes
+        .map((item: RArray | RObject) => {
             if (isRObject(item)) {
                 return `${printComments(
                     item.comments,
@@ -135,7 +139,6 @@ export function render(nodes: RefRNode[], options: RenderOptions): string {
             return `${printComments(item.comments, 0)}export type ${camel(
                 item.name
             )} = ${renderArray(item, 0)}`;
-        }),
-        join('\n\n')
-    )(nodes);
+        })
+        .join('\n\n');
 }
