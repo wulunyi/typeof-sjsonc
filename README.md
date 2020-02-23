@@ -100,6 +100,8 @@ export interface Aaa1 {
 -   name: interface 的名字，默认为 root
 -   options: 配置项
     -   disallowComments: 不产出注释，默认为 false
+    -    separate: 是否将子结构分割出单独的 interface，默认值 false
+   
 
 ## License
 
