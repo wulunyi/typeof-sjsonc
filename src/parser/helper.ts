@@ -135,25 +135,20 @@ export function createFindComments(comments: Comment[]) {
     };
 }
 
-export const isObjectPattern = propEq('type', 'ObjectPattern') as (
-    n: Node
-) => n is ObjectPattern;
+export const isObjectPattern = (n: Node): n is ObjectPattern =>
+    propEq('type', 'ObjectPattern', n);
 
-export const isArrayPattern = propEq('type', 'ArrayPattern') as (
-    n: Node
-) => n is ArrayPattern;
+export const isArrayPattern = (n: Node): n is ArrayPattern =>
+    propEq('type', 'ArrayPattern', n);
 
-export const isObjectProperty = propEq('type', 'ObjectProperty') as (
-    n: Node
-) => n is ObjectProperty;
+export const isObjectProperty = (n: Node): n is ObjectProperty =>
+    propEq('type', 'ObjectProperty', n);
 
-export const isBlockComment = propEq('type', 'BlockComment') as (
-    n: Node
-) => n is BlockComment;
+export const isBlockComment = (n: Node): n is BlockComment =>
+    propEq('type', 'BlockComment', n);
 
-export const isLineComment = propEq('type', 'LineComment') as (
-    n: Node
-) => n is LineComment;
+export const isLineComment = (n: Node): n is LineComment =>
+    propEq('type', 'LineComment', n);
 
 export const createUnionAppend = <T>(list: T[]) => (item: T) => {
     if (!contains(item, list)) {

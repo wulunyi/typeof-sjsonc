@@ -52,13 +52,13 @@ export function separate(ast: RefRNode[]): RefRNode[] {
     const result: RefRNode[] = [];
     const unionName = createUnionName();
 
-    let preLayer: NodePath[] = clone(ast).map(layerNode);
+    let curLayer: NodePath[] = clone(ast).map(layerNode);
     let nextLayer: NodePath[] = [];
 
     let layer = 1;
 
     while (true) {
-        preLayer.forEach(({ node, replace }) => {
+        curLayer.forEach(({ node, replace }) => {
             if (isRObject(node)) {
                 const name = unionName(node.name);
 
@@ -81,7 +81,7 @@ export function separate(ast: RefRNode[]): RefRNode[] {
         if (nextLayer.length === 0) {
             break;
         } else {
-            preLayer = nextLayer;
+            curLayer = nextLayer;
             nextLayer = [];
             layer += 1;
         }

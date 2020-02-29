@@ -3,7 +3,7 @@ import { typeofSjsonc } from './index';
 const result = typeofSjsonc(
     `//123
     {a: {//111
-        aa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa 
+        aaAA/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa 
     }, b: [123,true, {//111
         aa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa 
     }]} 

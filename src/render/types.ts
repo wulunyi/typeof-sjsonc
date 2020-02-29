@@ -55,7 +55,8 @@ export const createRObject: RCreater<RObject> = (
     };
 };
 
-export const isRObject = propEq('kind', 'Object') as (n: RNode) => n is RObject;
+export const isRObject = (n: RNode): n is RObject =>
+    propEq('kind', 'Object', n);
 
 export const createRArray: RCreater<RArray> = (
     name = '',
@@ -71,7 +72,7 @@ export const createRArray: RCreater<RArray> = (
     };
 };
 
-export const isRArray = propEq('kind', 'Array') as (n: RNode) => n is RArray;
+export const isRArray = (n: RNode): n is RArray => propEq('kind', 'Array', n);
 
 export const createRElement: RCreater<RElement> = (
     name = '',
@@ -87,6 +88,5 @@ export const createRElement: RCreater<RElement> = (
     };
 };
 
-export const isRElement = propEq('kind', 'Element') as (
-    n: RNode
-) => n is RElement;
+export const isRElement = (n: RNode): n is RElement =>
+    propEq('kind', 'Element', n);

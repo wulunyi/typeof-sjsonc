@@ -17,10 +17,10 @@ describe('Test Parser', () => {
 
     it('Test parse Element', () => {
         expect(
-            parse('{a: 123, b: true, c: {d: []}} [123]', ['Root', 'bbb'])
+            parse('{aB: 123, b: true, c: {d: []}} [123]', ['Root', 'bbb'])
         ).toEqual([
             createRObject('Root', [
-                createRElement('a', ['number']),
+                createRElement('aB', ['number']),
                 createRElement('b', ['boolean']),
                 createRObject('c', [createRArray('d', [])]),
             ]),
