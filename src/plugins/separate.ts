@@ -63,8 +63,8 @@ export function separate(ast: RefRNode[]): RefRNode[] {
         if (isRefRNode(node)) {
             const isObj = isRObject(node);
 
-            // ast.length < result.length 表示顶层
-            if (layer1Len < result.length || isObj) {
+            // ast.length > result.length 表示顶层
+            if (layer1Len > result.length || isObj) {
                 const name = unionName(node.name);
 
                 result.push(merge(node, { name }));
