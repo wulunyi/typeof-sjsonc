@@ -8,15 +8,14 @@ describe('Test separate', () => {
         expect(suffixName('name10')).toEqual('name11');
     });
     it('Test separate', () => {
-        const ast = [
-            createRObject('Root', [
-                createRObject('a', [createRElement('b', ['string'])]),
-            ]),
-        ];
+        const objA = createRObject('a', [createRElement('b', ['string'])]);
+        objA.markCount = 2;
 
-        expect(separate(ast)).toEqual([
-            createRObject('Root', [createRElement('a', ['A'])]),
-            createRObject('a', [createRElement('b', ['string'])]),
-        ]);
+        const ast = [createRObject('Root', [objA])];
+
+        const newStrA = createRElement('a', ['A']);
+        newStrA.markCount = 2;
+
+        expect(separate(ast)).toEqual([createRObject('Root', [newStrA]), objA]);
     });
 });

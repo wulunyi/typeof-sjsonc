@@ -13,3 +13,18 @@ const result = typeofSjsonc(
 );
 
 console.log(result);
+
+const resultSeparate = typeofSjsonc(
+    `
+    {
+        list: [
+            {a: {}},
+            {a: {}}
+        ]
+    }
+    `,
+    'Root',
+    { separate: true }
+);
+
+console.log(resultSeparate);

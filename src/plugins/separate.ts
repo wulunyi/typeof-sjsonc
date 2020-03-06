@@ -5,8 +5,8 @@ import {
     RefRNode,
     RNode,
     isRObject,
-    isRArray,
     createRElement,
+    isRefRNode,
 } from '../render/types';
 import { camel } from '../render/helper';
 import { merge, clone } from 'ramda';
@@ -41,6 +41,8 @@ export function layerNode(node: RNode, index: number, parent: RNode[]) {
     return {
         node,
         replace(finalNode: RNode) {
+            // 替换后还是保留标记计数
+            finalNode.markCount = node.markCount;
             parent.splice(index, 1, finalNode);
         },
     };
@@ -50,40 +52,29 @@ type NodePath = ReturnType<typeof layerNode>;
 
 export function separate(ast: RefRNode[]): RefRNode[] {
     const result: RefRNode[] = [];
+    const layer1Len = ast.length;
     const unionName = createUnionName();
 
-    let curLayer: NodePath[] = clone(ast).map(layerNode);
-    let nextLayer: NodePath[] = [];
+    const queue: NodePath[] = clone(ast).map(layerNode);
 
-    let layer = 1;
+    while (queue.length) {
+        const { node, replace } = queue.shift()!;
 
-    while (true) {
-        curLayer.forEach(({ node, replace }) => {
-            if (isRObject(node)) {
+        if (isRefRNode(node)) {
+            const isObj = isRObject(node);
+
+            // ast.length < result.length 表示顶层
+            if (layer1Len < result.length || isObj) {
                 const name = unionName(node.name);
 
                 result.push(merge(node, { name }));
 
-                replace(createRElement(node.name, [camel(name)]));
-
-                nextLayer.push(...node.children.map(layerNode));
-            } else if (isRArray(node)) {
-                if (layer === 1) {
-                    const name = unionName(node.name);
-
-                    result.push(merge(node, { name }));
+                if (isObj) {
+                    replace(createRElement(node.name, [camel(name)]));
                 }
-
-                nextLayer.push(...node.children.map(layerNode));
             }
-        });
 
-        if (nextLayer.length === 0) {
-            break;
-        } else {
-            curLayer = nextLayer;
-            nextLayer = [];
-            layer += 1;
+            queue.push(...node.children.map(layerNode));
         }
     }
 

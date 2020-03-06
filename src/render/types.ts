@@ -1,5 +1,5 @@
 import { Comment } from 'sjsonc-parser/types/parser/types';
-import { propEq } from 'ramda';
+import { propEq, anyPass } from 'ramda';
 
 export interface RenderOptions {
     /** 禁止产出注释 */
@@ -90,3 +90,7 @@ export const createRElement: RCreater<RElement> = (
 
 export const isRElement = (n: RNode): n is RElement =>
     propEq('kind', 'Element', n);
+
+export const isRefRNode = anyPass([isRArray, isRObject]) as (
+    n: RNode
+) => n is RefRNode;
