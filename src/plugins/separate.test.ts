@@ -16,6 +16,9 @@ describe('Test separate', () => {
         const newStrA = createRElement('a', ['A']);
         newStrA.markCount = 2;
 
-        expect(separate(ast)).toEqual([createRObject('Root', [newStrA]), objA]);
+        expect(separate(ast, {})).toEqual([
+            createRObject('Root', [newStrA]),
+            objA,
+        ]);
     });
 });

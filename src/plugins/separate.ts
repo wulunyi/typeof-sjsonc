@@ -8,7 +8,7 @@ import {
     createRElement,
     isRefRNode,
 } from '../render/types';
-import { camel } from '../render/helper';
+import { printNameByPrefix } from '../render/helper';
 import { merge, clone } from 'ramda';
 
 export function suffixName(name: string) {
@@ -50,7 +50,11 @@ export function layerNode(node: RNode, index: number, parent: RNode[]) {
 
 type NodePath = ReturnType<typeof layerNode>;
 
-export function separate(ast: RefRNode[]): RefRNode[] {
+export function separate(
+    ast: RefRNode[],
+    options: { prefix?: string } = {}
+): RefRNode[] {
+    const printName = printNameByPrefix(options.prefix ?? '');
     const result: RefRNode[] = [];
     const layer1Len = ast.length;
     const unionName = createUnionName();
@@ -70,7 +74,7 @@ export function separate(ast: RefRNode[]): RefRNode[] {
                 result.push(merge(node, { name }));
 
                 if (isObj) {
-                    replace(createRElement(node.name, [camel(name)]));
+                    replace(createRElement(node.name, [printName(name)]));
                 }
             }
 

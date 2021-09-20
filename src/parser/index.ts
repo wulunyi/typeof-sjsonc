@@ -14,7 +14,6 @@ import {
     ValueType,
     Program,
 } from 'sjsonc-parser/types/parser/types';
-import { __ } from 'ramda';
 import {
     RefRNode,
     createRObject,
@@ -123,8 +122,10 @@ export function parse(
                         nextSiblingChild
                     ) as RElement;
 
+                    const type = typeof valudeNode.value;
+
                     createUnionAppend(propertyNode.types)(
-                        typeof valudeNode.value
+                        valudeNode.value === null ? 'null' : type
                     );
 
                     unionAppend(propertyNode);

@@ -6,6 +6,7 @@ import { RenderOptions } from './types';
 const DEFAULT_OPTIONS: RenderOptions = {
     disallowComments: false,
     separate: false,
+    prefix: '',
 };
 
 export const sureOptions = merge(DEFAULT_OPTIONS) as (
@@ -31,46 +32,47 @@ export function printSpace(deep: number) {
     return result;
 }
 
-export const createPrintComments = (disallowComments: boolean) => (
-    comments: Comment[],
-    deep: number
-) => {
-    if (disallowComments) {
-        return '';
-    }
-
-    comments = sortWith(
-        [
-            ascend(path(['loc', 'start', 'line'])),
-            ascend(path(['loc', 'start', 'column'])),
-        ],
-        comments
-    );
-
-    const values = comments.reduce((final, cur) => {
-        if (isBlockComment(cur)) {
-            final.push(...cur.value);
-        } else {
-            final.push(cur.value);
+export const createPrintComments =
+    (disallowComments: boolean) => (comments: Comment[], deep: number) => {
+        if (disallowComments) {
+            return '';
         }
 
-        return final;
-    }, [] as string[]);
+        comments = sortWith(
+            [
+                ascend(path(['loc', 'start', 'line'])),
+                ascend(path(['loc', 'start', 'column'])),
+            ],
+            comments
+        );
 
-    if (values.length === 0) {
-        return '';
-    }
+        const values = comments.reduce((final, cur) => {
+            if (isBlockComment(cur)) {
+                final.push(...cur.value);
+            } else {
+                final.push(cur.value);
+            }
 
-    if (values.length === 1) {
-        return `${printSpace(deep)}/** ${values[0]} */\n`;
-    }
+            return final;
+        }, [] as string[]);
 
-    let result = `${printSpace(deep)}/**\n`;
+        if (values.length === 0) {
+            return '';
+        }
 
-    values.forEach(v => {
-        result += `${printSpace(deep)} * ${v}\n`;
-    });
+        if (values.length === 1) {
+            return `${printSpace(deep)}/** ${values[0]} */\n`;
+        }
 
-    result += `${printSpace(deep)} */\n`;
-    return result;
-};
+        let result = `${printSpace(deep)}/**\n`;
+
+        values.forEach(v => {
+            result += `${printSpace(deep)} * ${v}\n`;
+        });
+
+        result += `${printSpace(deep)} */\n`;
+        return result;
+    };
+
+export const printNameByPrefix = (prefix: string) => (name: string) =>
+    camel(prefix) + camel(name);
