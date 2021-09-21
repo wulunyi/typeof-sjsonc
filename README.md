@@ -1,5 +1,7 @@
 # typeof-sjsonc[![npm version](https://badge.fury.io/js/typeof-sjsonc.svg)](https://badge.fury.io/js/typeof-sjsonc)
 
+[在线体验地址](https://wulunyi.github.io/typeof-sjsonc-web/build/index.html)
+
 将 similar jsonc 转换为 TypeScript 的 interface
 
 ```txt
