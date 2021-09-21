@@ -1,5 +1,7 @@
 # typeof-sjsonc[![npm version](https://badge.fury.io/js/typeof-sjsonc.svg)](https://badge.fury.io/js/typeof-sjsonc)
 
+[在线体验地址](https://wulunyi.github.io/typeof-sjsonc-web/build/index.html)
+
 将 similar jsonc 转换为 TypeScript 的 interface
 
 ```txt
@@ -100,8 +102,8 @@ export interface Aaa1 {
 -   name: interface 的名字，默认为 root
 -   options: 配置项
     -   disallowComments: 不产出注释，默认为 false
-    -    separate: 是否将子结构分割出单独的 interface，默认值 false
-   
+    -   separate: 是否将子结构分割出单独的 interface，默认值 false
+    -   prifix: 是否添加前缀，例如添加 I
 
 ## License
 

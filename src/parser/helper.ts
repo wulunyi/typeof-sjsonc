@@ -46,18 +46,17 @@ const isAfter = (asloc: SourceLocation) => (bsloc: SourceLocation) => {
     return isAfterLoc(asloc.end, bsloc.start);
 };
 
-const isAfterNearSameLine = (
-    asloc: SourceLocation,
-    nextSloc?: SourceLocation
-) => (bsloc: SourceLocation) => {
-    return (
-        isSameLine(asloc.end, bsloc.start) &&
-        isSameLine(bsloc.start, bsloc.end) &&
-        isAfterLoc(asloc.end, bsloc.start) &&
-        nextSloc !== undefined &&
-        isBeforeLoc(nextSloc.start, bsloc.end)
-    );
-};
+const isAfterNearSameLine =
+    (asloc: SourceLocation, nextSloc?: SourceLocation) =>
+    (bsloc: SourceLocation) => {
+        return (
+            isSameLine(asloc.end, bsloc.start) &&
+            isSameLine(bsloc.start, bsloc.end) &&
+            isAfterLoc(asloc.end, bsloc.start) &&
+            nextSloc !== undefined &&
+            isBeforeLoc(nextSloc.start, bsloc.end)
+        );
+    };
 
 const isIn = (parentLoc: SourceLocation) => (commentLoc: SourceLocation) => {
     return and(
@@ -150,8 +149,10 @@ export const isBlockComment = (n: Node): n is BlockComment =>
 export const isLineComment = (n: Node): n is LineComment =>
     propEq('type', 'LineComment', n);
 
-export const createUnionAppend = <T>(list: T[]) => (item: T) => {
-    if (!contains(item, list)) {
-        list.push(item);
-    }
-};
+export const createUnionAppend =
+    <T>(list: T[]) =>
+    (item: T) => {
+        if (!contains(item, list)) {
+            list.push(item);
+        }
+    };

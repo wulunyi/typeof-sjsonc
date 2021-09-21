@@ -6,6 +6,8 @@ export interface RenderOptions {
     disallowComments: boolean;
     /** 是否将子结构分割出单独的 interface */
     separate: boolean;
+    /** 前缀（例如前缀 I => IData ）*/
+    prefix: string;
 }
 
 export type RNode = RObject | RArray | RElement;

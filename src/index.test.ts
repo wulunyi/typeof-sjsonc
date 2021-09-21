@@ -5,6 +5,7 @@ describe('Test typeofSjsonc', () => {
         const result = typeofSjsonc(
             `
             {
+                a: null,
                 list: [
                     {a: {}},
                     {a: {}}
@@ -12,11 +13,11 @@ describe('Test typeofSjsonc', () => {
             }
             `,
             'Root',
-            { separate: true }
+            { separate: true, prefix: 'i' }
         );
 
         expect(result).toBe(
-            `export interface Root {\n\tlist: List[];\n}\n\nexport interface List {\n\ta: A;\n}\n\nexport interface A {\n}`
+            'export interface IRoot {\n\ta: null;\n\tlist: IList[];\n}\n\nexport interface IList {\n\ta: IA;\n}\n\nexport interface IA {\n}'
         );
     });
 });

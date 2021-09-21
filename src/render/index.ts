@@ -9,17 +9,22 @@ import {
     RenderOptions,
 } from './types';
 import { Comment } from 'sjsonc-parser/types/parser/types';
-import { camel, printSpace, createPrintComments, sureOptions } from './helper';
+import {
+    printSpace,
+    createPrintComments,
+    sureOptions,
+    printNameByPrefix,
+} from './helper';
 
 export function render(
     nodes: RefRNode[],
     options?: Partial<RenderOptions>
 ): string {
-    const { disallowComments } = sureOptions(options);
+    const { disallowComments, prefix } = sureOptions(options);
+    const printName = printNameByPrefix(prefix);
+    const printCommentsAtDeep = createPrintComments(disallowComments);
 
-    const printComments = createPrintComments(disallowComments);
-
-    function renderArray(node: RArray, deep: number): string {
+    function renderArrayAtDeep(node: RArray, deep: number): string {
         let hasPattren = false;
 
         const types = node.children.reduce((final, child) => {
@@ -29,9 +34,9 @@ export function render(
                 hasPattren = true;
 
                 if (isRObject(child)) {
-                    final.push(renderObject(child, deep));
+                    final.push(renderObjectAtDeep(child, deep));
                 } else {
-                    final.push(renderArray(child, deep));
+                    final.push(renderArrayAtDeep(child, deep));
                 }
             }
 
@@ -62,7 +67,7 @@ export function render(
         }
     }
 
-    function renderObject(node: RObject, deep: number): string {
+    function renderObjectAtDeep(node: RObject, deep: number): string {
         // 根据名字分组
         // 在数组项中可能一个名字对应不同类型
         // 数组合并的时候会将对象进行合并 [{a: 1}, {a: true}]
@@ -78,7 +83,7 @@ export function render(
             }
         });
 
-        let result = `{\n`;
+        let result = '{\n';
 
         Object.entries(nameGroupMap).forEach(([name, nodes]) => {
             let markCount = 0;
@@ -93,10 +98,10 @@ export function render(
                 }
 
                 if (isRObject(item)) {
-                    return renderObject(item, deep + 1);
+                    return renderObjectAtDeep(item, deep + 1);
                 }
 
-                return renderArray(item, deep + 1);
+                return renderArrayAtDeep(item, deep + 1);
             });
 
             let type = 'any';
@@ -113,7 +118,7 @@ export function render(
                     : `${name}: ${type}`;
 
             if (comments.length > 0) {
-                result += printComments(comments, deep + 1);
+                result += printCommentsAtDeep(comments, deep + 1);
             }
 
             result += `${printSpace(deep + 1)}${member};\n`;
@@ -127,18 +132,22 @@ export function render(
     return nodes
         .map((item: RArray | RObject) => {
             if (isRObject(item)) {
-                return `${printComments(
+                return `${printCommentsAtDeep(
                     item.comments,
                     0
-                )}export interface ${camel(item.name)} ${renderObject(
+                )}export interface ${printName(item.name)} ${renderObjectAtDeep(
                     item,
                     0
                 )}`;
             }
 
-            return `${printComments(item.comments, 0)}export type ${camel(
-                item.name
-            )} = ${renderArray(item, 0)}`;
+            return `${printCommentsAtDeep(
+                item.comments,
+                0
+            )}export type ${printName(item.name)} = ${renderArrayAtDeep(
+                item,
+                0
+            )}`;
         })
         .join('\n\n');
 }

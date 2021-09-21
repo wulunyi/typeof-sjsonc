@@ -1,0 +1,5 @@
+build/
+lib/
+es/
+coverage/
+rollup.config.js

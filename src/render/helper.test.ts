@@ -5,6 +5,7 @@ describe('Test render helper', () => {
         expect(sureOptions(undefined)).toEqual({
             disallowComments: false,
             separate: false,
+            prefix: '',
         });
     });
 });

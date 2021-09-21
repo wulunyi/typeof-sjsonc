@@ -29,7 +29,8 @@ describe('Test Parser', () => {
     });
 
     it('Test parse comments', () => {
-        const str = `//123\n{a: {//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n}} \n/**12*/{c: 123}`;
+        const str =
+            '//123\n{a: {//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n}} \n/**12*/{c: 123}';
         const comments = sjsoncParser.parse(str).comments;
 
         expect(parse(str, ['root', 'root2'])).toEqual([
@@ -65,13 +66,13 @@ describe('Test Parser', () => {
         const root = createRObject('root', [a]);
         root.markCount = 2;
 
-        expect(parse(`[{a: 123},{a: true}]`)).toEqual([
+        expect(parse('[{a: 123},{a: true}]')).toEqual([
             createRArray('root', [root]),
         ]);
     });
 
     it('Test name set', () => {
-        expect(parse(`{} []`)).toEqual([
+        expect(parse('{} []')).toEqual([
             createRObject('root'),
             createRArray('root1'),
         ]);
