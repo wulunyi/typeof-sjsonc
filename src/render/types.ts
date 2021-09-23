@@ -1,4 +1,4 @@
-import { Comment } from 'sjsonc-parser/types/parser/types';
+import { Comment } from 'sjsonc-parser';
 import { propEq, anyPass } from 'ramda';
 
 export interface RenderOptions {

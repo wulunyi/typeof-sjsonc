@@ -1,6 +1,6 @@
 import { isBlockComment } from '../parser/helper';
 import { sortWith, ascend, path, merge } from 'ramda';
-import { Comment } from 'sjsonc-parser/types/parser/types';
+import { Comment } from 'sjsonc-parser';
 import { RenderOptions } from './types';
 
 const DEFAULT_OPTIONS: RenderOptions = {

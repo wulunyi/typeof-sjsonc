@@ -8,7 +8,7 @@ import {
     BlockComment,
     SourceLocation,
     Location,
-} from 'sjsonc-parser/types/parser/types';
+} from 'sjsonc-parser';
 import {
     propEq,
     anyPass,

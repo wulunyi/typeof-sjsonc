@@ -42,11 +42,11 @@ export default [
         external: ['ramda', 'sjsonc-parser'],
         plugins: [
             nodeResolve({
-                babelHelpers: 'bundled',
                 extensions: ['.ts', '.js']
             }),
             commonjs(),
             babel({
+                babelHelpers: 'bundled',
                 extensions: ['.ts', '.js'],
                 presets: ['@babel/preset-typescript', '@babel/preset-env']
             }),

@@ -8,7 +8,7 @@ import {
     isRElement,
     RenderOptions,
 } from './types';
-import { Comment } from 'sjsonc-parser/types/parser/types';
+import { Comment } from 'sjsonc-parser';
 import {
     printSpace,
     createPrintComments,

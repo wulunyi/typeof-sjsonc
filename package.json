@@ -33,7 +33,7 @@
     "license": "MIT",
     "dependencies": {
         "ramda": "^0.27.1",
-        "sjsonc-parser": "^1.0.3"
+        "sjsonc-parser": "^1.0.4-beta.2"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.15.6",

@@ -13,7 +13,7 @@ import {
     ObjectProperty,
     ValueType,
     Program,
-} from 'sjsonc-parser/types/parser/types';
+} from 'sjsonc-parser';
 import {
     RefRNode,
     createRObject,
