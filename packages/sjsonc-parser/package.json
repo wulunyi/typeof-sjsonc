@@ -1,0 +1,46 @@
+{
+  "name": "sjsonc-parser",
+  "version": "1.0.4",
+  "description": "parser json/jsonc/object",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "module": "es/index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "build": "rollup -c ./rollup.config.ts --configPlugin @rollup/plugin-typescript"
+  },
+  "files": [
+    "lib",
+    "es"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wulunyi/typeof-sjsonc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wulunyi/typeof-sjsonc/issues"
+  },
+  "homepage": "https://github.com/wulunyi/typeof-sjsonc#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.3",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "@types/jest": "^29.5.3",
+    "@types/lodash-es": "^4.17.8",
+    "@types/moo": "^0.5.5",
+    "eslint-config-custom": "workspace:*",
+    "jest": "^29.6.1",
+    "rollup": "^3.26.3",
+    "ts-jest": "^29.1.1",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "moo": "^0.5.2"
+  }
+}
