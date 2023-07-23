@@ -1,110 +1,81 @@
-# typeof-sjsonc[![npm version](https://badge.fury.io/js/typeof-sjsonc.svg)](https://badge.fury.io/js/typeof-sjsonc)
+# Turborepo starter
 
-[在线体验地址](https://wulunyi.github.io/typeof-sjsonc-web/build/index.html)
+This is an official starter Turborepo.
 
-将 similar jsonc 转换为 TypeScript 的 interface
+## Using this example
 
-```txt
-{
-    // 123
-    "a": 123,
-    /** true */
-    b: true,
-    c: [{d: 'test'}]
-}
+Run the following command:
+
+```sh
+npx create-turbo@latest
 ```
 
-```typescript
-export interface Root {
-    /** 123 */
-    a: number;
-    /** true */
-    b: boolean;
-    c: Array<{
-        d: string;
-    }>;
-}
+## What's inside?
+
+This Turborepo includes the following packages/apps:
+
+### Apps and Packages
+
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```
+cd my-turborepo
+pnpm build
 ```
 
-## Usage
+### Develop
 
-npm
+To develop all apps and packages, run the following command:
 
-```shell
-npm i typeof-sjsonc --save
+```
+cd my-turborepo
+pnpm dev
 ```
 
-yarn
+### Remote Caching
 
-```shell
-yarn add typeof-sjsonc --save
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+
+```
+cd my-turborepo
+npx turbo login
 ```
 
-use
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-```typescript
-import { typeofSjsonc } from 'typeof-sjsonc';
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
-typeofSjsonc(
-    '//123\n{a: {//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n}, b: [123,true, {//111\naa/**22*/: 123, /**eee*/ b: true,/**bbb*/ // aaa \n}]} \n/**12*/{c: 123}',
-    'aaa'
-);
+```
+npx turbo link
 ```
 
-Result
+## Useful Links
 
-```typescript
-/** 123 */
-export interface Aaa {
-    a: {
-        /**
-         * 111
-         * 22
-         * eee
-         */
-        aa: number;
-        /**
-         * bbb
-         * aaa
-         */
-        b: boolean;
-    };
-    b: Array<
-        | number
-        | boolean
-        | {
-              /**
-               * 111
-               * 22
-               * eee
-               */
-              aa: number;
-              /**
-               * bbb
-               * aaa
-               */
-              b: boolean;
-          }
-    >;
-}
+Learn more about the power of Turborepo:
 
-/** 12 */
-export interface Aaa1 {
-    c: number;
-}
-```
-
-## API
-
-### typeofSjsonc(jsonc: string, name?: string, options?: {disallowComments?: boolean})
-
--   jsonc: 待抓换的字符串
--   name: interface 的名字，默认为 root
--   options: 配置项
-    -   disallowComments: 不产出注释，默认为 false
-    -   separate: 是否将子结构分割出单独的 interface，默认值 false
-    -   prifix: 是否添加前缀，例如添加 I
-
-## License
-
-MIT
+- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
