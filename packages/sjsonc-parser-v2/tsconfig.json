@@ -1,0 +1,11 @@
+{
+  "extends": "tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "module": "CommonJS",
+    "target": "ESNext",
+    "plugins": [{ "name": "next" }],
+    "incremental": false,
+  },
+  "include": ["src/**/*.ts"]
+}

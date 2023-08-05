@@ -1,0 +1,11 @@
+// this is line comment
+/** this is block comment **/
+const a = {
+  "name": "xxx",
+  // leadingComments
+  'nick': 'bbb', // trailingComments
+  age: 18,
+  isBoy: true,
+  like: null,
+  ccc: ['hello', ]
+}
