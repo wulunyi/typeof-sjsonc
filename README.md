@@ -98,7 +98,7 @@ export interface Aaa1 {
 
 ### typeofSjsonc(jsonc: string, name?: string, options?: {disallowComments?: boolean})
 
--   jsonc: 待抓换的字符串
+-   jsonc: 待转换的字符串
 -   name: interface 的名字，默认为 root
 -   options: 配置项
     -   disallowComments: 不产出注释，默认为 false
